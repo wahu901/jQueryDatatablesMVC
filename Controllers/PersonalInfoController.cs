@@ -17,11 +17,19 @@ namespace jQueryDatatablesMVC.Controllers
         public PersonalInfoController(IPersonalInfoRepository personalInfoRepository)
         {
             _personalInfoRepository = personalInfoRepository;
+            Console.WriteLine("Injected PersonalInfoRepository");
         }
 
         public IActionResult Index()
         {
             return View();
+        }
+
+
+        public void OnGet()
+        {
+            var personalInfoData = _personalInfoRepository.GetAll();
+            Console.WriteLine("OnGet : personalInfoData=" + personalInfoData.Count());
         }
 
         [HttpPost]
@@ -42,11 +50,12 @@ namespace jQueryDatatablesMVC.Controllers
                 int resultTotal = 0;
 
                 var personalInfoData = (from tblObj in _personalInfoRepository.GetAll() select tblObj);
-
+                Console.WriteLine("GetDataTabelData: personalInfoData=" + personalInfoData.Count());
                 //Sorting
                 if (!(string.IsNullOrEmpty(sortColumn) && string.IsNullOrEmpty(sortColumnAscDesc)))
                 {
                     personalInfoData = _personalInfoRepository.GetAll().OrderBy(sortColumn + " " + sortColumnAscDesc);
+
                 }
 
                 //Search
